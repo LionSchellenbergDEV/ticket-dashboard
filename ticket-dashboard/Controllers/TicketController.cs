@@ -1,12 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ticket_dashboard.Services;
 
 namespace ticket_dashboard.Controllers
 {
     public class TicketController : Controller
     {
-        public IActionResult Index()
+        private readonly TicketService _ticketService;
+
+        public TicketController(TicketService ticketService)
         {
-            return View();
+            _ticketService = ticketService;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateStatus(int id, string status)
+        {
+            _ticketService.UpdateStatus(id, status);
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }
