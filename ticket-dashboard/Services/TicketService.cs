@@ -1,6 +1,7 @@
-﻿namespace ticket_dashboard.Services
+﻿using ticket_dashboard.Repositories.Interfaces;
+namespace ticket_dashboard.Services
 {
-    public class TicketService
+    public class TicketService :ITicketService
     {
     }
 }

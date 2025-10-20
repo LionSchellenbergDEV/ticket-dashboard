@@ -1,7 +1,7 @@
 ﻿using ticket_dashboard.Repositories.Interfaces;
 namespace ticket_dashboard.Services
 {
-    public class AuthService : IAuthService
+    public class MailService : IMailService
     {
     }
 }

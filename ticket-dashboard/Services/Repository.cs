@@ -1,6 +1,21 @@
-﻿namespace ticket_dashboard.Services
+﻿using ticket_dashboard.Repositories.Interfaces;
+namespace ticket_dashboard.Services
 {
-    public class Repository
+    public class Repository<T> : IRepository<T> where T : class
     {
+        private readonly ApplicationDbContext _context;
+
+        // DbContext im Konstruktor anfordern
+        public Repository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // Beispielimplementierung
+        public async Task<T?> GetByIdAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+        // ...
     }
 }
