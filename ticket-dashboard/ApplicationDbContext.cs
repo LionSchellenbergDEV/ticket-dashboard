@@ -10,6 +10,6 @@ namespace ticket_dashboard
 
         public DbSet<UserModel> Users { get; set; }
         public DbSet<TicketModel> Tickets { get; set; }
-        public DbSet<MailTicketModel> MailTickets { get; set; }
+        public DbSet<TicketModel> MailTickets { get; set; }
     }
 }

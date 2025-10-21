@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ticket_dashboard.Models.PaginatedList<ticket_dashboard.Models.MailModel>
 @{
+    ViewData["Title"] = "E-Mails zur Zuweisung";
 }
+
+<h1>Eingegangene E-Mails zur Zuweisung</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        Keine neuen E-Mails im Posteingang (@ViewBag.FolderName).
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Betreff</th>
+                <th>Absender</th>
+                <th>Empfangen</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mail in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-uid="@mail.Uid.Id">@mail.Subject</a>
+                    </td>
+                    <td>@mail.Sender</td>
+                    <td>@mail.Date.LocalDateTime.ToString("g")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-uid="@mail.Uid.Id" class="btn btn-sm btn-info">
+                            Details ansehen
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@* Paginierungssteuerung unterhalb der Tabelle *@
+<div class="d-flex justify-content-between mt-4">
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageIndex - 1)"
+       class="btn btn-default @prevDisabled">
+        &lt; Vorherige
+    </a>
+
+    <span class="page-info">
+        Seite @Model.PageIndex von @Model.TotalPages
+    </span>
+
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageIndex + 1)"
+       class="btn btn-default @nextDisabled">
+        Nächste &gt;
+    </a>
+</div>
