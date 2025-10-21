@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ticket_dashboard;
+using ticket_dashboard.Models;
 using ticket_dashboard.Repositories.Interfaces;
 using ticket_dashboard.Services;
 
@@ -14,6 +17,29 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IMailService, MailService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddTransient<IPasswordHasher<UserModel>, PasswordHasher<UserModel>>();
+
+// Fügen Sie diese Zeilen in Program.cs hinzu:
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        // Nutzer werden nach 30min aus Sicherheitsgründen automatisch abgemeldet. 
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+
+        // Definiert den Pfad, zu dem unauthentifizierte Benutzer umgeleitet werden
+        options.LoginPath = "/Auth/Login";
+
+        // Definiert den Pfad, zu dem Benutzer ohne Berechtigung umgeleitet werden
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+
+        // Definiert die Dauer des Cookies
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+
+// Stellen Sie sicher, dass dies registriert ist, da Sie Controller verwenden
+builder.Services.AddControllersWithViews();
 
 
 // Add services to the container.
@@ -33,6 +59,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

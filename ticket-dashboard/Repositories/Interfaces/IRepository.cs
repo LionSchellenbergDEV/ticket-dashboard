@@ -5,5 +5,6 @@
         // CRUD-Methoden hier definieren
         Task<T?> GetByIdAsync(int id);
         // ...
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using ticket_dashboard.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ticket_dashboard.Repositories.Interfaces;
 namespace ticket_dashboard.Services
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -15,6 +16,11 @@ namespace ticket_dashboard.Services
         public async Task<T?> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
         }
         // ...
     }
